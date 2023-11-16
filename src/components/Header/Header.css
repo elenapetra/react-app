@@ -1,0 +1,23 @@
+.header {
+  width: 1440px;
+  height: 80px;
+  position: static;
+}
+.logo {
+  width: 111px;
+  height: 48px;
+  top: 12px;
+  left: 37px;
+  padding: 0px, 0.5px, 0px, 0.23px;
+  position: fixed;
+}
+.button {
+  width: 140px;
+  height: 50px;
+  top: 15px;
+  left: 1270px;
+  padding: 13px, 36px, 13px, 36px;
+  gap: 10px;
+  overflow: hidden;
+  position: fixed;
+}

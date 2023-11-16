@@ -1,0 +1,66 @@
+.main-container {
+  font-family: 'Open Sans';
+  width: 1122px;
+
+  border: 1px solid;
+  margin-bottom: 33px;
+  background-color: white;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.edit-btn,
+.trash-btn {
+  background-color: #007298;
+  width: 61px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5%;
+  border: none;
+}
+.edit-icon {
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.trash-icon {
+  width: 25px;
+  height: 25px;
+  color: white;
+}
+.right-buttons {
+  width: 322px;
+  height: 52px;
+  display: flex;
+  row-gap: 10px;
+  justify-content: space-between;
+}
+.course-info-data {
+  display: flex;
+  flex-direction: column;
+  max-width: 323px;
+  max-height: 90px;
+}
+span:first-of-type {
+  font-weight: bold;
+}
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+.description {
+  padding-left: 20px;
+  max-width: 677px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0px;
+  text-align: left;
+}

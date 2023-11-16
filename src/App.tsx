@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import { Courses } from './components/Courses/Courses';
+import { Header } from './components/Header/Header';
+import { mockedAuthorsList, mockedCoursesList } from 'helpers/constants';
+import { CourseInfo } from 'components/CourseInfo/CourseInfo';
+import { CourseDataProps } from 'helpers/Types';
 
 function App() {
+  const [currentCourse, setCurrentCourse] = useState<CourseDataProps | null>(
+    null
+  );
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Header />
+      {currentCourse !== null ? (
+        <CourseInfo
+          course={currentCourse}
+          authorData={mockedAuthorsList}
+          setCurrentCourse={setCurrentCourse}
+        />
+      ) : (
+        <Courses
+          setCurrentCourse={setCurrentCourse}
+          courseData={mockedCoursesList}
+          authorData={mockedAuthorsList}
+        />
+      )}
     </div>
   );
 }
