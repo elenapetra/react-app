@@ -1,9 +1,9 @@
-export type AuthorDataProps = {
+export type AuthorData = {
   id: string;
   name: string;
 };
 
-export type CourseDataProps = {
+export type CourseData = {
   id: string;
   title: string;
   description: string;
@@ -13,19 +13,32 @@ export type CourseDataProps = {
 };
 
 export type CoursesProps = {
-  courseData: CourseDataProps[];
-  authorData: AuthorDataProps[];
+  courseData: CourseData[];
+  authorData: AuthorData[];
   setCurrentCourse: any;
 };
 
-export type CourseCardProps = {
-  course: CourseDataProps;
-  authorData: AuthorDataProps[];
-  onCourseClick: any;
+export type ICourseCard = {
+  course: CourseData;
+  authorsData: AuthorData[];
 };
 
-export type CourseInfoProps = {
-  course: CourseDataProps;
-  authorData: AuthorDataProps[];
+export type CourseInfo = {
+  course: CourseData;
+  authorData: AuthorData[];
   setCurrentCourse: any;
 };
+export type ErrorsParam = {
+  name: string;
+  email: string;
+  password: string;
+};
+
+export interface FormData {
+  id: string;
+  title: string;
+  description: string;
+  duration: string | undefined;
+  creationDate: string;
+  authors: string[];
+}

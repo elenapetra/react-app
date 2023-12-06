@@ -1,4 +1,5 @@
 import { Button } from '../../../../common/Button/Button';
+import './SearchBar.css';
 
 type SearchBarProps = {
   children: React.ReactNode;
@@ -6,7 +7,7 @@ type SearchBarProps = {
 
 export const SearchBar = (props: SearchBarProps) => {
   return (
-    <div>
+    <div className='search-bar'>
       {props.children}
       <Button
         buttonText='SEARCH'

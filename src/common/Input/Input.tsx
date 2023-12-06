@@ -4,16 +4,41 @@ type InputProp = {
   type: string;
   required: boolean;
   labelText: string;
-  errorMessage: string;
+  onChange?: any;
+  name?: string;
+  value?: string | number;
+  min?: string;
+  className?: string;
+  style?: {
+    width: string;
+    height: string;
+    display?: string;
+  };
 };
 
 export const Input = (props: InputProp) => {
   return (
     <div>
-      <label>{props.labelText}</label>
+      <label
+        style={{
+          fontFamily: 'Open sans',
+          fontWeight: '700',
+          fontSize: '16px',
+        }}
+      >
+        {props.labelText}
+      </label>
       <br />
-      <input type={props.type} placeholder='Input text' />
-      <span>{props.errorMessage}</span>
+      <input
+        min={props.min}
+        className={props.className}
+        style={props.style}
+        value={props.value}
+        name={props.name}
+        type={props.type}
+        placeholder='Input text'
+        onChange={props.onChange}
+      />
     </div>
   );
 };

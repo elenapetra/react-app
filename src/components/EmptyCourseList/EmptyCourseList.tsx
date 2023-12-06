@@ -7,7 +7,7 @@ export const EmptyCourseList = () => {
       <p>Please use "Add New Course" button to add your first course</p>
       <Button
         buttonText='ADD NEW COURSE'
-        onClick={() => console.log('Add New Course button was clicked')}
+        onClick={() => (window.location.href = '/courses/add')}
         style={{
           width: '233px',
           height: '50px',
