@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'common/Button/Button';
+import { useState } from 'react';
+import Button from 'common/Button/Button';
 import { Input } from 'common/Input/Input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ErrorsParam } from 'helpers/Types';
 import './Login.css';
 
@@ -9,9 +9,9 @@ export const Login = () => {
   const initialValues = { email: '', password: '', name: '' };
   const [user, setUser] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({ email: '', password: '' });
-  const [isSubmit, setIsSubmit] = useState(false);
   const [loginError, setLoginError] = useState('');
-  /////////////////////////////////////////////////
+
+  const navigate = useNavigate();
 
   async function login() {
     try {
@@ -22,36 +22,39 @@ export const Login = () => {
           'Content-Type': 'application/json',
         },
       });
-
-      const content = await res.json();
-      console.log(content);
-
-      if (content.successful === true) {
-        localStorage.setItem('token', content.result);
-        localStorage.setItem('userName', content.user.name);
-
-        window.location.pathname = '/courses';
-      } else {
-        setLoginError('');
-        console.log('Login data is wrong!');
+      if (!res.ok) {
+        if (res.status === 400) {
+          throw new Error(
+            'Invalid credentials. Please check your username and password.'
+          );
+        }
       }
-    } catch (error) {
-      setLoginError('');
-      console.error('Error');
+      const content = await res.json();
+
+      localStorage.setItem('token', content.result);
+      localStorage.setItem('userName', content.user.name);
+      navigate('/courses');
+    } catch (error: any) {
+      setLoginError(error.message);
+      if (error.message === 'Failed to fetch') {
+        setLoginError(
+          'Unable to connect to the server. Please try again later.'
+        );
+      } else {
+        setLoginError(error.message);
+      }
     }
   }
-  /////////////////////////////////
+
   const handleInput = (e: any) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
-  /////////////////////////////
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setFormErrors(validation(user));
-    setIsSubmit(true);
-    setUser(initialValues);
   };
-  /////////////////////////////
+
   const validation = (user: ErrorsParam) => {
     const errors = {} as ErrorsParam;
     if (user.email === '') {
@@ -62,13 +65,7 @@ export const Login = () => {
     }
     return errors;
   };
-  //////////////////////////////////////////
-  useEffect(() => {
-    console.log(formErrors);
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-    }
-  }, [formErrors]);
-  //////////////////////////////
+
   return (
     <div className='login-wrapper'>
       <h3 className='login-title'>Login</h3>
@@ -84,7 +81,7 @@ export const Login = () => {
             className='login-email'
           />
           {formErrors.email && (
-            <span style={{ color: 'red' }}>{formErrors.email}</span>
+            <span className='login-error'>{formErrors.email}</span>
           )}
         </div>
         <div className='login-row'>
@@ -98,16 +95,15 @@ export const Login = () => {
             className='login-name'
           />
           {formErrors.password && (
-            <span style={{ color: 'red' }}>{formErrors.password}</span>
+            <span className='login-error'>{formErrors.password}</span>
           )}
         </div>
         <div className='login-row'>
-          <Button
-            buttonText='LOGIN'
-            onClick={login}
-            style={{ width: '286px', height: '50px' }}
-          />
-
+          <Button label='LOGIN' onClick={login} size='extra-large' />
+          {/* {!formErrors && <p className='login-error'>{loginError}</p>} */}
+          {Object.keys(formErrors).length === 0 && (
+            <p className='login-error'>{loginError}</p>
+          )}
           <div className='register-link'>
             If you don't have an account you may
             <Link to='/registration'>
@@ -116,7 +112,6 @@ export const Login = () => {
           </div>
         </div>
       </form>
-      {loginError && <span>{loginError}</span>}
     </div>
   );
 };

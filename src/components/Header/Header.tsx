@@ -1,35 +1,30 @@
 import { useState, useEffect } from 'react';
-import { Button } from '../../common/Button/Button';
+import Button from 'common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 import './Header.css';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Header = () => {
   const [isLogedIn, setIsLogedIn] = useState(false);
+
   let token = localStorage.getItem('token');
   const userName = localStorage.getItem('userName');
 
-  const checkLogin = () => {
-    if (token) {
-      setIsLogedIn(true);
-    } else {
-      setIsLogedIn(false);
-    }
-  };
-  ///////////////
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    checkLogin();
-  }, [isLogedIn]);
+    setIsLogedIn(!!token);
+  }, []);
 
   const hideLogButton =
-    window.location.pathname === '/login' ||
-    window.location.pathname === '/registration';
+    location.pathname === '/login' || location.pathname === '/registration';
 
   return (
     <div className='header'>
       <div className='logo'>
         <Logo />
       </div>
-
       {!hideLogButton && (
         <div className='right-elements'>
           {isLogedIn ? (
@@ -37,26 +32,20 @@ export const Header = () => {
               <div className='userName'>{userName}</div>
               <div className='btn'>
                 <Button
-                  style={{
-                    width: '140px',
-                    height: '50px',
-                  }}
-                  buttonText='LOGOUT'
+                  label='LOGOUT'
+                  size='small'
                   onClick={() => {
                     localStorage.removeItem('token');
-                    window.location.pathname = '/login';
+                    navigate('/login');
                   }}
                 />
               </div>
             </div>
           ) : (
             <Button
-              style={{
-                width: '140px',
-                height: '50px',
-              }}
-              buttonText='LOGIN'
-              onClick={() => (window.location.pathname = '/login')}
+              label='LOGIN'
+              size='small'
+              onClick={() => navigate('/login')}
             />
           )}
         </div>

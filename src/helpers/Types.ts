@@ -13,20 +13,18 @@ export type CourseData = {
 };
 
 export type CoursesProps = {
-  courseData: CourseData[];
-  authorData: AuthorData[];
-  setCurrentCourse: any;
+  courseList: CourseData[];
+  authorList: AuthorData[];
 };
 
 export type ICourseCard = {
   course: CourseData;
-  authorsData: AuthorData[];
+  authors: AuthorData[];
 };
 
 export type CourseInfo = {
-  course: CourseData;
-  authorData: AuthorData[];
-  setCurrentCourse: any;
+  courseList: CourseData;
+  authorList: AuthorData[];
 };
 export type ErrorsParam = {
   name: string;
@@ -41,4 +39,7 @@ export interface FormData {
   duration: string | undefined;
   creationDate: string;
   authors: string[];
+}
+export interface SearchBarProps {
+  onSearch: (term: string) => void;
 }

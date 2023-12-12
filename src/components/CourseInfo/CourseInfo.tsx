@@ -1,26 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Button } from '../../common/Button/Button';
+import { useNavigate } from 'react-router-dom';
+import Button from 'common/Button/Button';
 import { AuthorData } from 'helpers/Types';
 import { useParams } from 'react-router-dom';
-import { mockedAuthorsList, mockedCoursesList } from 'helpers/constants';
 import { formatCreationDate } from 'helpers/formatCreationDate';
 import { getCourseDuration } from 'helpers/getCourseDuration';
 import './CourseInfo.css';
+import { CoursesProps } from 'helpers/Types';
 
-export const CourseInfo = () => {
-  const [courses, setCourses] = useState<any[]>([]);
+export const CourseInfo = ({ courseList, authorList }: CoursesProps) => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    setCourses(mockedCoursesList);
-  }, []);
-
-  const course = courses.find((c) => c.id === courseId);
+  const course = courseList.find((c: any) => c.id === courseId);
   if (!course) return <>Course not found</>;
 
-  const authors = mockedAuthorsList.filter((a) =>
-    course.authors.includes(a.id)
-  );
+  const authors = authorList.filter((a: any) => course.authors.includes(a.id));
 
   return (
     <div className='course-info-wrapper'>
@@ -62,13 +56,10 @@ export const CourseInfo = () => {
       </div>
       <div className='back-button'>
         <Button
-          buttonText='BACK'
+          size='large'
+          label='BACK'
           onClick={() => {
-            window.location.pathname = '/courses';
-          }}
-          style={{
-            width: '185px',
-            height: '50px',
+            navigate('/courses');
           }}
         />
       </div>

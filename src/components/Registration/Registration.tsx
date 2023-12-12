@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Button } from 'common/Button/Button';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from 'common/Button/Button';
 import { Input } from 'common/Input/Input';
 import { Link } from 'react-router-dom';
 import './Registration.css';
@@ -12,8 +13,10 @@ export const Registration = () => {
     email: '',
     password: '',
   });
-  const [isSubmit, setIsSubmit] = useState(false);
-  ////////////////////////
+  const [registerError, setRegisterError] = useState('');
+
+  const navigate = useNavigate();
+
   async function register() {
     try {
       const res = await fetch('http://localhost:4000/register', {
@@ -24,26 +27,37 @@ export const Registration = () => {
         },
         body: JSON.stringify(newUser),
       });
+
+      if (!res.ok) {
+        if (res.status === 400) {
+          throw new Error(
+            'Invalid credentials. Please enter a valid email address'
+          );
+        }
+      }
       const content = await res.json();
       if (content.successful === true) {
-        window.location.pathname = '/login';
+        navigate('/login');
       }
-    } catch (error) {
-      console.error('error');
+    } catch (error: any) {
+      setRegisterError(error.message);
+      if (error.message === 'Failed to fetch') {
+        setRegisterError(
+          'Unable to connect to the server. Please try again later.'
+        );
+      }
     }
   }
 
-  ///////////////
   const handleInput = (e: any) => {
     setNewUser({ ...newUser, [e.target.name]: e.target.value });
   };
-  ///////////////////////
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     setFormErrors(validation(newUser));
-    setIsSubmit(true);
   };
-  //////////////
+
   const validation = (newUser: {
     name: string;
     email: string;
@@ -61,12 +75,6 @@ export const Registration = () => {
     }
     return errors;
   };
-  /////////////////////////
-  useEffect(() => {
-    console.log(formErrors);
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-    }
-  }, [formErrors]);
 
   return (
     <div>
@@ -83,7 +91,7 @@ export const Registration = () => {
             className='regist-name'
           />
           {formErrors.name && (
-            <span style={{ color: 'red' }}>{formErrors.name}</span>
+            <span className='registration-error'>{formErrors.name}</span>
           )}
         </div>
         <div className='reg-row'>
@@ -97,7 +105,7 @@ export const Registration = () => {
             className='regist-email'
           />
           {formErrors.email && (
-            <span style={{ color: 'red' }}>{formErrors.email}</span>
+            <span className='registration-error'>{formErrors.email}</span>
           )}
         </div>
         <div className='reg-row'>
@@ -111,15 +119,14 @@ export const Registration = () => {
             className='regist-password'
           />
           {formErrors.password && (
-            <span style={{ color: 'red' }}>{formErrors.password}</span>
+            <span className='registration-error'>{formErrors.password}</span>
           )}
         </div>
         <div className='reg-row'>
-          <Button
-            style={{ width: '286px', height: '50px' }}
-            buttonText='REGISTRATION'
-            onClick={register}
-          />
+          <Button label='REGISTRATION' onClick={register} size='extra-large' />
+          {Object.keys(formErrors).length === 0 && (
+            <p className='registration-error'>{registerError}</p>
+          )}
           <div className='login-link'>
             If you have an account you may
             <Link to='/login'>

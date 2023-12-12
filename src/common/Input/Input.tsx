@@ -9,11 +9,6 @@ type InputProp = {
   value?: string | number;
   min?: string;
   className?: string;
-  style?: {
-    width: string;
-    height: string;
-    display?: string;
-  };
 };
 
 export const Input = (props: InputProp) => {
@@ -32,7 +27,6 @@ export const Input = (props: InputProp) => {
       <input
         min={props.min}
         className={props.className}
-        style={props.style}
         value={props.value}
         name={props.name}
         type={props.type}

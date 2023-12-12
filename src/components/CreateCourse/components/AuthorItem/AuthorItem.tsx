@@ -1,14 +1,10 @@
-import { Button } from 'common/Button/Button';
+import Button from 'common/Button/Button';
 import './AuthorItem.css';
 type AuthorItemProps = {
   buttonText: string;
-  onClick: any;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   authorName: string;
   value?: string;
-  style: {
-    width: string;
-    height: string;
-  };
 };
 
 export const AuthorItem = (props: AuthorItemProps) => {
@@ -16,9 +12,9 @@ export const AuthorItem = (props: AuthorItemProps) => {
     <div className='author-item-wrapper'>
       <Button
         className='author-item-btn'
-        buttonText={props.buttonText}
-        style={props.style}
+        label={props.buttonText}
         onClick={props.onClick}
+        size='very-small'
       />
       <p className='author-item-name'>{props.authorName}</p>
     </div>

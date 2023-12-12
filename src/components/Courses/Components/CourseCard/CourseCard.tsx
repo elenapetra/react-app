@@ -1,5 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
-import { Button } from 'common/Button/Button';
+import Button from 'common/Button/Button';
 import { formatCreationDate } from '../../../../helpers/formatCreationDate';
 import { ICourseCard, AuthorData } from 'helpers/Types';
 import {
@@ -8,19 +9,12 @@ import {
 } from '@mui/icons-material';
 import './CourseCard.css';
 
-export const CourseCard = ({ course, authorsData }: ICourseCard) => {
-  const authors = authorsData.filter((a) => course.authors?.includes(a.id));
-  const localStorageAuthorList = localStorage.getItem('newAuthorList');
-  let authorsUpdated;
-  if (localStorageAuthorList) {
-    let newAuthorsObject = JSON.parse(localStorageAuthorList);
-    authorsUpdated = newAuthorsObject.filter((a: any) =>
-      course.authors?.includes(a.id)
-    );
-  }
+export const CourseCard = ({ course, authors }: ICourseCard) => {
+  const navigate = useNavigate();
+  const courseAuthors = authors.filter((a) => course.authors.includes(a.id));
 
   const onCourseClick = (courseId: String) => {
-    window.location.pathname = `/courses/${courseId}`;
+    navigate(`/courses/${courseId}`);
   };
   return (
     <div className='course-card-wrapper'>
@@ -32,9 +26,11 @@ export const CourseCard = ({ course, authorsData }: ICourseCard) => {
         <div className='course-card-rows'>
           <div className='course-card-row'>
             <span>Authors: </span>
-            {(authorsUpdated ?? authors)
-              .map((author: AuthorData) => author.name)
-              .join(', ')}
+            <span>
+              {courseAuthors
+                .map((author: AuthorData) => author.name)
+                .join(', ')}
+            </span>
           </div>
           <div className='course-card-row'>
             <span> Duration:</span> {getCourseDuration(course.duration)}
@@ -45,12 +41,9 @@ export const CourseCard = ({ course, authorsData }: ICourseCard) => {
         </div>
         <div className='right-buttons'>
           <Button
-            buttonText='SHOW COURSE'
+            label='SHOW COURSE'
             onClick={() => onCourseClick(course.id)}
-            style={{
-              width: '180px',
-              height: '50px',
-            }}
+            size='medium'
             className='show-course-button'
           />
           <button className='trash-btn'>

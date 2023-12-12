@@ -1,22 +1,24 @@
-import { Button } from '../../../../common/Button/Button';
+import Button from 'common/Button/Button';
+import { useState } from 'react';
+import { SearchBarProps } from 'helpers/Types';
 import './SearchBar.css';
 
-type SearchBarProps = {
-  children: React.ReactNode;
-};
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
+  const [searchTerm, setSearchTerm] = useState('');
 
-export const SearchBar = (props: SearchBarProps) => {
+  const handleSearch = () => {
+    onSearch(searchTerm);
+  };
   return (
     <div className='search-bar'>
-      {props.children}
-      <Button
-        buttonText='SEARCH'
-        onClick={() => console.log('SEARCH button was clicked')}
-        style={{
-          width: '148px',
-          height: '50px',
-        }}
+      <input
+        className='search-bar-input'
+        value={searchTerm}
+        type='text'
+        placeholder='Input text'
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
+      <Button label='SEARCH' size='small' onClick={handleSearch} />
     </div>
   );
 };

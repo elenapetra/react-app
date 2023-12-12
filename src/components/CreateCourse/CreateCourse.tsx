@@ -1,29 +1,32 @@
-import { useEffect, useState } from 'react';
-import { mockedAuthorsList as authorsData } from 'helpers/constants';
-import { Button } from 'common/Button/Button';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Button from 'common/Button/Button';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import { Input } from 'common/Input/Input';
 import { getCourseDuration } from 'helpers/getCourseDuration';
 import { v4 as uuid } from 'uuid';
-import { FormData } from 'helpers/Types';
+import { AuthorData, FormData } from 'helpers/Types';
 import './CreateCourse.css';
 import { formatCreationDate } from 'helpers/formatCreationDate';
 
-export const CreateCourse = () => {
+export const CreateCourse = ({
+  authorList,
+  updateCourses,
+  updateAuthors,
+}: any) => {
   const initialValues = { title: '', description: '', duration: 0 };
   const [formData, setFormData] = useState(initialValues);
   const [courseAuthors, setCourseAuthors] = useState<
     { id: string; name: string }[]
   >([]);
-  const [isSubmit, setIsSubmit] = useState(false);
-  // const localStorageAuthorList = localStorage.getItem('newAuthorList');
-  const [authorsList, setAuthorsList] = useState(authorsData);
+  const [authorsList, setAuthorsList] = useState(authorList);
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState({
     title: '',
     description: '',
     duration: '',
   });
+  const [authorError, setAuthorError] = useState('');
   const responseFormBody: FormData = {
     id: '',
     title: '',
@@ -32,62 +35,60 @@ export const CreateCourse = () => {
     creationDate: new Date().toDateString(),
     authors: [],
   };
-  //////////////////
-
-  /////////////////
+  const navigate = useNavigate();
   const handleInputFields = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  //////////////////////////////////
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    responseFormBody.id = uuid();
-    responseFormBody.title = formData.title;
-    responseFormBody.description = formData.description;
-    responseFormBody.duration = String(formData.duration);
-    responseFormBody.authors = courseAuthors.map((a) => {
-      return a.id;
-    });
-    responseFormBody.creationDate = formatCreationDate(new Date().toString());
-    localStorage.setItem('responseFormBody', JSON.stringify(responseFormBody));
-    setErrorMessage(validation(formData));
-    setIsSubmit(true);
-  };
-  useEffect(() => {
+    const result = validation(formData);
+    setErrorMessage(result);
     if (
-      Object.values(errorMessage.title).length === 0 &&
-      Object.values(errorMessage.description).length === 0 &&
-      Object.values(errorMessage.duration).length === 0 &&
-      isSubmit
+      !result.title.length &&
+      !result.description.length &&
+      !result.duration.length
     ) {
-      window.location.pathname = '/courses';
-    } else console.log('Fix the form errors');
-  }, [errorMessage]);
-  ////////////ADD NEW AUTHOR//////////////////
+      responseFormBody.id = uuid();
+      responseFormBody.title = formData.title;
+      responseFormBody.description = formData.description;
+      responseFormBody.duration = String(formData.duration);
+      responseFormBody.creationDate = formatCreationDate(new Date().toString());
+      responseFormBody.authors = courseAuthors.map((a) => {
+        return a.id;
+      });
+      updateCourses(responseFormBody);
+      navigate('/courses');
+    }
+  };
+
   const addToList = (e: any) => {
     e.preventDefault();
-    const newList = authorsList.concat({ id: uuid(), name });
-
-    localStorage.setItem('newAuthorList', JSON.stringify(newList));
-    const retrievedObject = localStorage.getItem('newAuthorList');
-    if (retrievedObject) {
-      const newAuthorsObject = JSON.parse(retrievedObject);
-      setAuthorsList(newAuthorsObject);
+    if (name) {
+      const doesNameExist = authorsList.some(
+        (author: AuthorData) => author.name === name
+      );
+      if (doesNameExist) {
+        setAuthorError('Author with this name already exists!');
+        return;
+      }
+      const newAuthor = { id: uuid(), name };
+      setAuthorsList([...authorsList, newAuthor]);
+      updateAuthors(newAuthor);
+      setName('');
+    } else {
+      setAuthorError('');
     }
-    setName('');
   };
 
-  ///////////////ADD BUTTON//////////////
   const handleAddButton = (author: { id: string; name: string }) => {
-    const newAuthorsList = authorsList.filter((item) => {
+    const newAuthorsList = authorsList.filter((item: any) => {
       return item.id !== author.id;
     });
     setAuthorsList(newAuthorsList);
     setCourseAuthors([...courseAuthors, author]);
   };
 
-  ////////////////////DELETE BUTTON////////////
   const handleDeleteButton = (author: { id: string; name: string }) => {
     const newCourseList = courseAuthors.filter((item) => {
       return item.id !== author.id;
@@ -96,7 +97,6 @@ export const CreateCourse = () => {
     setCourseAuthors(newCourseList);
   };
 
-  ///////FORM VALIDATION////////////////
   const validation = (formData: {
     title: string;
     description: string;
@@ -118,7 +118,6 @@ export const CreateCourse = () => {
     }
     return errors;
   };
-  ////////////////////////////////////////
 
   return (
     <div className='create-course-wrapper'>
@@ -158,7 +157,6 @@ export const CreateCourse = () => {
               <h2>Duration</h2>
               <div className='duration-input-display'>
                 <Input
-                  style={{ width: '100px', height: '50px' }}
                   type='number'
                   labelText='Duration'
                   required
@@ -195,11 +193,12 @@ export const CreateCourse = () => {
                 <div className='create-author-btn'>
                   <Button
                     onClick={addToList}
-                    buttonText='CREATE AUTHOR'
-                    style={{ width: '185px', height: '50px' }}
+                    label='CREATE AUTHOR'
+                    size='large'
                   />
-                </div>
-              </div>
+                </div>{' '}
+              </div>{' '}
+              {authorError && <p className='author-error'>{authorError}</p>}
             </div>
 
             <div className='course-authors'>
@@ -211,7 +210,6 @@ export const CreateCourse = () => {
                       key={author.id}
                       authorName={author.name}
                       buttonText='DELETE'
-                      style={{ height: '50px', width: '70px' }}
                       onClick={(e: any) => {
                         e.preventDefault();
                         handleDeleteButton(author);
@@ -224,12 +222,11 @@ export const CreateCourse = () => {
             <div className='authors-list'>
               <h3>Authors List</h3>
               <div className='author-item'>
-                {authorsList.map((author) => (
+                {authorsList.map((author: any) => (
                   <AuthorItem
                     key={author.id}
                     authorName={author.name}
                     buttonText='ADD'
-                    style={{ height: '50px', width: '60px' }}
                     onClick={(e: any) => {
                       e.preventDefault();
                       handleAddButton(author);
@@ -245,18 +242,20 @@ export const CreateCourse = () => {
         <Button
           onClick={(e: any) => {
             e.preventDefault();
-            window.location.href = '/courses';
+            updateCourses(null);
+            navigate('/courses');
+            window.location.reload();
           }}
-          buttonText='CANCEL'
-          style={{ width: '185px', height: '50px' }}
+          label='CANCEL'
           className='cancel-btn'
+          size='large'
         />
         <Button
           form='myform'
-          style={{ width: '185px', height: '50px' }}
-          buttonText='CREATE COURSE'
+          label='CREATE COURSE'
           type='submit'
           className='submit-btn'
+          size='large'
         />
       </div>
     </div>
