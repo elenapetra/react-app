@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import { Input } from 'common/Input/Input';
@@ -71,7 +71,7 @@ export const CreateCourse = () => {
   const addToList = (e: any) => {
     e.preventDefault();
     if (name.length >= 2) {
-      const doesNameExist = authorsList.some(
+      const doesNameExist = authorList.some(
         (author: AuthorData) => author.name === name
       );
       if (doesNameExist) {
@@ -250,7 +250,6 @@ export const CreateCourse = () => {
           onClick={(e: any) => {
             e.preventDefault();
             navigate('/courses');
-            window.location.reload();
           }}
           label='CANCEL'
           className='cancel-btn'

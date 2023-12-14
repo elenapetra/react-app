@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
 import Button from 'common/Button/Button';
 import { AuthorData } from 'helpers/Types';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { formatCreationDate } from 'helpers/formatCreationDate';
 import { getCourseDuration } from 'helpers/getCourseDuration';
 import { getCourses, getAuthors } from 'store/selectors';
 import { useSelector } from 'react-redux';
+
 import './CourseInfo.css';
 
 export const CourseInfo = () => {

@@ -9,22 +9,15 @@ type ButtonProps = {
     | 'medium'
     | 'large'
     | 'super-large'
-    | 'extra-large';
+    | 'extra-large'
+    | 'costum-btn';
   label: React.ReactNode;
   type?: string;
   form?: string;
   className?: string;
-  customWidth?: boolean;
 };
 
-const Button = ({
-  label,
-  onClick,
-  size,
-  form,
-  className,
-  customWidth,
-}: ButtonProps) => {
+const Button = ({ label, onClick, size, form, className }: ButtonProps) => {
   const getSizeStyles = (width: string) => {
     switch (width) {
       case 'very-small':
@@ -39,12 +32,14 @@ const Button = ({
         return '230px';
       case 'extra-large':
         return '287px';
+      case 'costum-btn':
+        return '60px';
       default:
         return '180px';
     }
   };
   const buttonStyles = {
-    width: customWidth ? '50px' : getSizeStyles(size),
+    width: getSizeStyles(size),
   };
 
   return (
