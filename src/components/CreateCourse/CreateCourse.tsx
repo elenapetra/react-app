@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Button from 'common/Button/Button';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
@@ -6,19 +7,19 @@ import { Input } from 'common/Input/Input';
 import { getCourseDuration } from 'helpers/getCourseDuration';
 import { v4 as uuid } from 'uuid';
 import { AuthorData, FormData } from 'helpers/Types';
+import { saveAuthorAction } from 'store/authors/actions';
+import { saveCourseAction } from 'store/courses/actions';
+import { useSelector } from 'react-redux';
+import { getAuthors } from 'store/selectors';
 import './CreateCourse.css';
-import { formatCreationDate } from 'helpers/formatCreationDate';
 
-export const CreateCourse = ({
-  authorList,
-  updateCourses,
-  updateAuthors,
-}: any) => {
+export const CreateCourse = () => {
   const initialValues = { title: '', description: '', duration: 0 };
   const [formData, setFormData] = useState(initialValues);
   const [courseAuthors, setCourseAuthors] = useState<
     { id: string; name: string }[]
   >([]);
+  const authorList = useSelector(getAuthors);
   const [authorsList, setAuthorsList] = useState(authorList);
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState({
@@ -27,15 +28,19 @@ export const CreateCourse = ({
     duration: '',
   });
   const [authorError, setAuthorError] = useState('');
+
   const responseFormBody: FormData = {
     id: '',
     title: '',
     description: '',
-    duration: '',
-    creationDate: new Date().toDateString(),
+    duration: 0,
+    creationDate: '',
     authors: [],
   };
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleInputFields = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -52,32 +57,34 @@ export const CreateCourse = ({
       responseFormBody.id = uuid();
       responseFormBody.title = formData.title;
       responseFormBody.description = formData.description;
-      responseFormBody.duration = String(formData.duration);
-      responseFormBody.creationDate = formatCreationDate(new Date().toString());
+      responseFormBody.duration = formData.duration;
+      responseFormBody.creationDate = new Date().toString();
       responseFormBody.authors = courseAuthors.map((a) => {
         return a.id;
       });
-      updateCourses(responseFormBody);
+
+      dispatch(saveCourseAction(responseFormBody));
       navigate('/courses');
     }
   };
 
   const addToList = (e: any) => {
     e.preventDefault();
-    if (name) {
+    if (name.length >= 2) {
       const doesNameExist = authorsList.some(
         (author: AuthorData) => author.name === name
       );
       if (doesNameExist) {
         setAuthorError('Author with this name already exists!');
-        return;
+      } else {
+        setAuthorError('');
+        const newAuthor = { name, id: uuid() };
+        dispatch(saveAuthorAction(newAuthor));
+        setAuthorsList([...authorsList, newAuthor]);
+        setName('');
       }
-      const newAuthor = { id: uuid(), name };
-      setAuthorsList([...authorsList, newAuthor]);
-      updateAuthors(newAuthor);
-      setName('');
     } else {
-      setAuthorError('');
+      setAuthorError('Name should have at least 2 characters.');
     }
   };
 
@@ -113,7 +120,7 @@ export const CreateCourse = ({
     if (formData.description.length < 2) {
       errors.description = 'Descriptions should have at least 2 characters.';
     }
-    if (formData.duration == 0) {
+    if (formData.duration === 0) {
       errors.duration = 'Duration is required';
     }
     return errors;
@@ -196,8 +203,8 @@ export const CreateCourse = ({
                     label='CREATE AUTHOR'
                     size='large'
                   />
-                </div>{' '}
-              </div>{' '}
+                </div>
+              </div>
               {authorError && <p className='author-error'>{authorError}</p>}
             </div>
 
@@ -242,7 +249,6 @@ export const CreateCourse = ({
         <Button
           onClick={(e: any) => {
             e.preventDefault();
-            updateCourses(null);
             navigate('/courses');
             window.location.reload();
           }}

@@ -4,12 +4,15 @@ import { AuthorData } from 'helpers/Types';
 import { useParams } from 'react-router-dom';
 import { formatCreationDate } from 'helpers/formatCreationDate';
 import { getCourseDuration } from 'helpers/getCourseDuration';
+import { getCourses, getAuthors } from 'store/selectors';
+import { useSelector } from 'react-redux';
 import './CourseInfo.css';
-import { CoursesProps } from 'helpers/Types';
 
-export const CourseInfo = ({ courseList, authorList }: CoursesProps) => {
+export const CourseInfo = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const courseList = useSelector(getCourses);
+  const authorList = useSelector(getAuthors);
 
   const course = courseList.find((c: any) => c.id === courseId);
   if (!course) return <>Course not found</>;

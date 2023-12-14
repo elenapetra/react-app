@@ -5,9 +5,14 @@ import { SearchBar } from './Components/SearchBar/SearchBar';
 import { EmptyCourseList } from '../EmptyCourseList/EmptyCourseList';
 import { CourseData } from 'helpers/Types';
 import Button from 'common/Button/Button';
+import { useSelector } from 'react-redux';
+import { getCourses, getAuthors } from 'store/selectors';
 import './Courses.css';
 
-export const Courses = ({ courseList, authorList }: any) => {
+export const Courses = () => {
+  const courseList = useSelector(getCourses);
+  const authorList = useSelector(getAuthors);
+
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const token = localStorage.getItem('token');

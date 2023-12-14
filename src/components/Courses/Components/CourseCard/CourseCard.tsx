@@ -8,6 +8,8 @@ import {
   CreateOutlined as CreateOutlinedIcon,
 } from '@mui/icons-material';
 import './CourseCard.css';
+import { useDispatch } from 'react-redux';
+import { deleteCourseAction } from 'store/courses/actions';
 
 export const CourseCard = ({ course, authors }: ICourseCard) => {
   const navigate = useNavigate();
@@ -16,6 +18,11 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
   const onCourseClick = (courseId: String) => {
     navigate(`/courses/${courseId}`);
   };
+  const dispatch = useDispatch();
+  const handleDeleteClick = () => {
+    dispatch(deleteCourseAction(course.id));
+  };
+
   return (
     <div className='course-card-wrapper'>
       <div className='course-card-left-column'>
@@ -46,12 +53,20 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
             size='medium'
             className='show-course-button'
           />
-          <button className='trash-btn'>
-            <DeleteOutlinedIcon className='trash-icon' />
-          </button>
-          <button style={{ backgroundColor: '#007298' }} className='edit-btn'>
-            <CreateOutlinedIcon className='edit-icon' />
-          </button>{' '}
+          <Button
+            onClick={handleDeleteClick}
+            size='very-small'
+            label={<DeleteOutlinedIcon className='trash-icon' />}
+            className='trash-btn'
+            customWidth={true}
+          />
+          <Button
+            onClick={() => console.log('edit')}
+            size='very-small'
+            label={<CreateOutlinedIcon className='edit-icon' />}
+            className='edit-btn'
+            customWidth={true}
+          />
         </div>
       </div>
     </div>

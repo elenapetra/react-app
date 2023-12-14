@@ -7,8 +7,8 @@ export type CourseData = {
   id: string;
   title: string;
   description: string;
-  duration: number;
   creationDate: string;
+  duration: number;
   authors: string[];
 };
 
@@ -36,10 +36,11 @@ export interface FormData {
   id: string;
   title: string;
   description: string;
-  duration: string | undefined;
+  duration: number;
   creationDate: string;
   authors: string[];
 }
+
 export interface SearchBarProps {
   onSearch: (term: string) => void;
 }
