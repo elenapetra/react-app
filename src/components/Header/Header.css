@@ -1,0 +1,27 @@
+.logo {
+  width: 111px;
+  height: 48px;
+  top: 12px;
+  left: 37px;
+  position: fixed;
+}
+.userName {
+  width: fit-content;
+  height: 50px;
+  position: fixed;
+  right: 180px;
+  height: 20px;
+  top: 30px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 20px;
+}
+.button {
+  width: 140px;
+  height: 50px;
+}
+.right-elements {
+  position: fixed;
+  right: 20px;
+  top: 15px;
+}

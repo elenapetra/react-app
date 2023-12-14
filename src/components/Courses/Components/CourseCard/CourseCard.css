@@ -1,0 +1,82 @@
+.course-card-wrapper {
+  width: 80%;
+  border: 1px solid #0000001f;
+  border-radius: 4px;
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding: 20px 30px;
+  margin-top: 40px;
+}
+.course-card-left-column {
+  min-width: 65%;
+  margin-right: 30px;
+  flex: 1;
+}
+.course-card-right-column {
+  width: 340px;
+  display: flex;
+
+  flex-direction: column;
+  justify-content: space-between;
+}
+.course-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0px;
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+.course-card-description {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.course-card-row {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  margin-bottom: 5px;
+}
+.course-card-row > :first-child {
+  font-weight: 700;
+}
+.course-card-rows {
+  margin-top: 40px;
+}
+
+.right-buttons {
+  width: 322px;
+  height: 52px;
+  display: flex;
+  row-gap: 10px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.edit-btn,
+.trash-btn {
+  background-color: #007298;
+  width: 61px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5%;
+  border: none;
+}
+.edit-icon {
+  width: 25px;
+  height: 25px;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+.trash-icon {
+  width: 25px;
+  height: 25px;
+  color: white;
+}
