@@ -8,7 +8,7 @@ export const userInitialState: UserType = {
 };
 export const usersReducer = (state = userInitialState, action: UsersAction) => {
   switch (action.type) {
-    case UsersActionTypes.ADD_USER:
+    case UsersActionTypes.STORE_USER:
       return {
         isAuth: action.payload.isAuth,
         name: action.payload.name,

@@ -17,7 +17,8 @@ export const Courses = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const handleSearch = (term: string) => {
-    setSearchTerm(term);
+    const lowercaseSearchTerm = term.toLowerCase();
+    setSearchTerm(lowercaseSearchTerm);
   };
 
   return (

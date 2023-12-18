@@ -1,14 +1,16 @@
 import {
   CoursesActionTypes,
   CourseType,
-  AddCourseAction,
+  StoreCourseAction,
   DeleteCourseAction,
   SaveCourseAction,
   UpdateCourseAction,
 } from './types';
 
-export const addCourseAction = (courseData: CourseType[]): AddCourseAction => ({
-  type: CoursesActionTypes.ADD_COURSES,
+export const storeCourseAction = (
+  courseData: CourseType[]
+): StoreCourseAction => ({
+  type: CoursesActionTypes.STORE_COURSES,
   payload: courseData,
 });
 

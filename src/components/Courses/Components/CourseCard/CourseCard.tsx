@@ -55,13 +55,13 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
           />
           <Button
             onClick={handleDeleteClick}
-            size='costum-btn'
+            size='custom-btn'
             label={<DeleteOutlinedIcon className='trash-icon' />}
             className='trash-btn'
           />
           <Button
             onClick={() => console.log('edit')}
-            size='costum-btn'
+            size='custom-btn'
             label={<CreateOutlinedIcon className='edit-icon' />}
             className='edit-btn'
           />

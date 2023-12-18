@@ -5,15 +5,15 @@ export type AuthorType = {
 
 export const enum AuthorsActionTypes {
   SAVE_AUTHOR = 'SAVE_AUTHOR',
-  ADD_AUTHORS = 'ADD_AUTHORS',
+  STORE_AUTHORS = 'STORE_AUTHORS',
 }
 export type SaveAuthorAction = {
   type: AuthorsActionTypes.SAVE_AUTHOR;
   payload: AuthorType;
 };
 
-export type AddAuthorAction = {
-  type: AuthorsActionTypes.ADD_AUTHORS;
+export type StoreAuthorAction = {
+  type: AuthorsActionTypes.STORE_AUTHORS;
   payload: AuthorType[];
 };
 
@@ -22,9 +22,9 @@ interface SaveAuthor {
   payload: AuthorType;
 }
 
-interface AddAuthors {
-  type: AuthorsActionTypes.ADD_AUTHORS;
+interface StoreAuthors {
+  type: AuthorsActionTypes.STORE_AUTHORS;
   payload: AuthorType[];
 }
 
-export type AuthorsAction = SaveAuthor | AddAuthors;
+export type AuthorsAction = SaveAuthor | StoreAuthors;

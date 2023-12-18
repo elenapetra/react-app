@@ -10,7 +10,7 @@ type ButtonProps = {
     | 'large'
     | 'super-large'
     | 'extra-large'
-    | 'costum-btn';
+    | 'custom-btn';
   label: React.ReactNode;
   type?: string;
   form?: string;
@@ -32,7 +32,7 @@ const Button = ({ label, onClick, size, form, className }: ButtonProps) => {
         return '230px';
       case 'extra-large':
         return '287px';
-      case 'costum-btn':
+      case 'custom-btn':
         return '60px';
       default:
         return '180px';

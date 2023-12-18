@@ -1,24 +1,17 @@
-import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { Courses } from './components/Courses/Courses';
 import { Header } from './components/Header/Header';
 import { CourseInfo } from 'components/CourseInfo/CourseInfo';
 import { Registration } from 'components/Registration/Registration';
 import { Login } from 'components/Login/Login';
 import { CreateCourse } from 'components/CreateCourse/CreateCourse';
-import { fetchAndAddAuthors, fetchAndAddCourses } from 'services';
+import { useFetchAppData } from 'helpers/fetchData';
 
 import './App.css';
 
 function App() {
   const token = localStorage.getItem('token');
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    fetchAndAddCourses(dispatch);
-    fetchAndAddAuthors(dispatch);
-  }, [dispatch]);
+  useFetchAppData();
 
   return (
     <div className='App'>

@@ -6,7 +6,7 @@ export const coursesReducer = (
   action: CoursesAction
 ) => {
   switch (action.type) {
-    case CoursesActionTypes.ADD_COURSES:
+    case CoursesActionTypes.STORE_COURSES:
       return action.payload;
     case CoursesActionTypes.SAVE_COURSE:
       return [...state, action.payload];

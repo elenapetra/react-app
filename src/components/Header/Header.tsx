@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
@@ -8,9 +7,8 @@ import { getUserName } from 'store/selectors';
 import './Header.css';
 
 export const Header = () => {
-  const [isLogedIn, setIsLogedIn] = useState(false);
-
   let token = localStorage.getItem('token');
+  const isLoggedIn = !!token;
   const userName = useSelector(getUserName);
 
   const navigate = useNavigate();
@@ -23,10 +21,6 @@ export const Header = () => {
     navigate('/login');
   };
 
-  useEffect(() => {
-    setIsLogedIn(!!token);
-  }, []);
-
   const hideLogButton =
     location.pathname === '/login' || location.pathname === '/registration';
 
@@ -37,7 +31,7 @@ export const Header = () => {
       </div>
       {!hideLogButton && (
         <div className='right-elements'>
-          {isLogedIn && (
+          {isLoggedIn && (
             <div>
               <div className='userName'>{userName}</div>
               <div className='btn'>

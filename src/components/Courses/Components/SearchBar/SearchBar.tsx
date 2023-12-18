@@ -16,7 +16,7 @@ export const SearchBar = ({ onSearch }: SearchBarProps) => {
         value={searchTerm}
         type='text'
         placeholder='Input text'
-        onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
       <Button label='SEARCH' size='small' onClick={handleSearch} />
     </div>

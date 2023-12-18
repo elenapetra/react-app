@@ -1,7 +1,7 @@
-import { UsersActionTypes, UserType, AddUserAction } from './types';
+import { UsersActionTypes, UserType, StoreUserAction } from './types';
 
-export const addUserAction = (userData: UserType): AddUserAction => ({
-  type: UsersActionTypes.ADD_USER,
+export const storeUserAction = (userData: UserType): StoreUserAction => ({
+  type: UsersActionTypes.STORE_USER,
   payload: userData,
 });
 

@@ -1,7 +1,3 @@
-import { Dispatch } from 'redux';
-import { addCourseAction } from 'store/courses/actions';
-import { addAuthorAction } from 'store/authors/actions';
-
 const fetchCourses = async () => {
   try {
     const response = await fetch(`http://localhost:4000/courses/all`, {
@@ -18,15 +14,6 @@ const fetchCourses = async () => {
   } catch (error) {
     console.error('Error fetching courses:', error);
     throw error;
-  }
-};
-
-export const fetchAndAddCourses = async (dispatch: Dispatch) => {
-  try {
-    const coursesResponse = await fetchCourses();
-    dispatch(addCourseAction(coursesResponse.result));
-  } catch (error) {
-    console.error('Error fetching and saving courses:', error);
   }
 };
 
@@ -49,12 +36,4 @@ const fetchAuthors = async () => {
   }
 };
 
-export const fetchAndAddAuthors = async (dispatch: Dispatch) => {
-  try {
-    const authorsResponse = await fetchAuthors();
-    dispatch(addAuthorAction(authorsResponse.result));
-  } catch (error) {
-    console.error('Error fetching and saving authors:', error);
-  }
-};
 export { fetchCourses, fetchAuthors };

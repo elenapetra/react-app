@@ -1,12 +1,14 @@
 import {
   AuthorsActionTypes,
   AuthorType,
-  AddAuthorAction,
+  StoreAuthorAction,
   SaveAuthorAction,
 } from './types';
 
-export const addAuthorAction = (authorData: AuthorType[]): AddAuthorAction => ({
-  type: AuthorsActionTypes.ADD_AUTHORS,
+export const storeAuthorAction = (
+  authorData: AuthorType[]
+): StoreAuthorAction => ({
+  type: AuthorsActionTypes.STORE_AUTHORS,
   payload: authorData,
 });
 

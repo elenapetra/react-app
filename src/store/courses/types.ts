@@ -9,13 +9,13 @@ export type CourseType = {
 
 export const enum CoursesActionTypes {
   SAVE_COURSE = 'SAVE_COURSE',
-  ADD_COURSES = 'ADD_COURSES',
+  STORE_COURSES = 'STORE_COURSES',
   DELETE_COURSE = 'DELETE_COURSE',
   UPDATE_COURSE = 'UPDATE_COURSE',
 }
 
-export type AddCourseAction = {
-  type: CoursesActionTypes.ADD_COURSES;
+export type StoreCourseAction = {
+  type: CoursesActionTypes.STORE_COURSES;
   payload: CourseType[];
 };
 export type DeleteCourseAction = {
@@ -39,8 +39,8 @@ interface SaveCourse {
   payload: CourseType;
 }
 
-interface AddCourses {
-  type: CoursesActionTypes.ADD_COURSES;
+interface StoreCourses {
+  type: CoursesActionTypes.STORE_COURSES;
   payload: CourseType[];
 }
 
@@ -59,6 +59,6 @@ interface UpdateCourse {
 
 export type CoursesAction =
   | SaveCourse
-  | AddCourses
+  | StoreCourses
   | DeleteCourse
   | UpdateCourse;

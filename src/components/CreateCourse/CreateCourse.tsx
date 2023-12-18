@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
@@ -11,6 +11,7 @@ import { saveAuthorAction } from 'store/authors/actions';
 import { saveCourseAction } from 'store/courses/actions';
 import { useSelector } from 'react-redux';
 import { getAuthors } from 'store/selectors';
+
 import './CreateCourse.css';
 
 export const CreateCourse = () => {
@@ -20,7 +21,7 @@ export const CreateCourse = () => {
     { id: string; name: string }[]
   >([]);
   const authorList = useSelector(getAuthors);
-  const [authorsList, setAuthorsList] = useState(authorList);
+  const [authorsList, setAuthorsList] = useState<AuthorData[]>([]);
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState({
     title: '',
@@ -28,7 +29,7 @@ export const CreateCourse = () => {
     duration: '',
   });
   const [authorError, setAuthorError] = useState('');
-
+  const [courseAuthorsError, setCourseAuthorsError] = useState('');
   const responseFormBody: FormData = {
     id: '',
     title: '',
@@ -41,6 +42,10 @@ export const CreateCourse = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    setAuthorsList(authorList);
+  }, [authorList]);
+
   const handleInputFields = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -52,7 +57,8 @@ export const CreateCourse = () => {
     if (
       !result.title.length &&
       !result.description.length &&
-      !result.duration.length
+      !result.duration.length &&
+      courseAuthors.length
     ) {
       responseFormBody.id = uuid();
       responseFormBody.title = formData.title;
@@ -65,6 +71,9 @@ export const CreateCourse = () => {
 
       dispatch(saveCourseAction(responseFormBody));
       navigate('/courses');
+    }
+    if (courseAuthors.length === 0) {
+      setCourseAuthorsError('Please add at least an author.');
     }
   };
 
@@ -121,7 +130,7 @@ export const CreateCourse = () => {
       errors.description = 'Descriptions should have at least 2 characters.';
     }
     if (formData.duration === 0) {
-      errors.duration = 'Duration is required';
+      errors.duration = 'Duration is required.';
     }
     return errors;
   };
@@ -210,6 +219,9 @@ export const CreateCourse = () => {
 
             <div className='course-authors'>
               <h2>Course Authors:</h2>
+              {courseAuthors.length === 0 && (
+                <p className='author-error'>{courseAuthorsError}</p>
+              )}
               <div className='author-item'>
                 {courseAuthors.map((author) => {
                   return (

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
 import { Input } from 'common/Input/Input';
 import { ErrorsParam } from 'helpers/Types';
-import { addUserAction } from 'store/user/actions';
+import { storeUserAction } from 'store/user/actions';
 import './Login.css';
 
 export const Login = () => {
@@ -35,7 +35,7 @@ export const Login = () => {
       localStorage.setItem('token', content.result);
 
       dispatch(
-        addUserAction({
+        storeUserAction({
           isAuth: true,
           name: content.user.name,
           email: content.user.email,
