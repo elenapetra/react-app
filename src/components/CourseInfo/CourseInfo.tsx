@@ -1,15 +1,18 @@
-import { useNavigate } from 'react-router-dom';
 import Button from 'common/Button/Button';
 import { AuthorData } from 'helpers/Types';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { formatCreationDate } from 'helpers/formatCreationDate';
 import { getCourseDuration } from 'helpers/getCourseDuration';
-import './CourseInfo.css';
-import { CoursesProps } from 'helpers/Types';
+import { getCourses, getAuthors } from 'store/selectors';
+import { useSelector } from 'react-redux';
 
-export const CourseInfo = ({ courseList, authorList }: CoursesProps) => {
+import './CourseInfo.css';
+
+export const CourseInfo = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const courseList = useSelector(getCourses);
+  const authorList = useSelector(getAuthors);
 
   const course = courseList.find((c: any) => c.id === courseId);
   if (!course) return <>Course not found</>;

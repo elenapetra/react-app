@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
 import { Input } from 'common/Input/Input';
-import { Link, useNavigate } from 'react-router-dom';
 import { ErrorsParam } from 'helpers/Types';
+import { storeUserAction } from 'store/user/actions';
 import './Login.css';
 
 export const Login = () => {
@@ -10,7 +12,7 @@ export const Login = () => {
   const [user, setUser] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({ email: '', password: '' });
   const [loginError, setLoginError] = useState('');
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function login() {
@@ -30,9 +32,17 @@ export const Login = () => {
         }
       }
       const content = await res.json();
-
       localStorage.setItem('token', content.result);
-      localStorage.setItem('userName', content.user.name);
+
+      dispatch(
+        storeUserAction({
+          isAuth: true,
+          name: content.user.name,
+          email: content.user.email,
+          token: content.result,
+        })
+      );
+
       navigate('/courses');
     } catch (error: any) {
       setLoginError(error.message);

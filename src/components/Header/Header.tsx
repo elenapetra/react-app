@@ -1,21 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
 import { Logo } from './components/Logo/Logo';
+import { removeUserAction } from 'store/user/actions';
+import { getUserName } from 'store/selectors';
 import './Header.css';
-import { useNavigate, useLocation } from 'react-router-dom';
 
 export const Header = () => {
-  const [isLogedIn, setIsLogedIn] = useState(false);
-
   let token = localStorage.getItem('token');
-  const userName = localStorage.getItem('userName');
+  const isLoggedIn = !!token;
+  const userName = useSelector(getUserName);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
 
-  useEffect(() => {
-    setIsLogedIn(!!token);
-  }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    dispatch(removeUserAction());
+    navigate('/login');
+  };
 
   const hideLogButton =
     location.pathname === '/login' || location.pathname === '/registration';
@@ -27,26 +31,13 @@ export const Header = () => {
       </div>
       {!hideLogButton && (
         <div className='right-elements'>
-          {isLogedIn ? (
+          {isLoggedIn && (
             <div>
               <div className='userName'>{userName}</div>
               <div className='btn'>
-                <Button
-                  label='LOGOUT'
-                  size='small'
-                  onClick={() => {
-                    localStorage.removeItem('token');
-                    navigate('/login');
-                  }}
-                />
+                <Button label='LOGOUT' size='small' onClick={handleLogout} />
               </div>
             </div>
-          ) : (
-            <Button
-              label='LOGIN'
-              size='small'
-              onClick={() => navigate('/login')}
-            />
           )}
         </div>
       )}
