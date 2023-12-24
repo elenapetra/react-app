@@ -5,17 +5,17 @@ import { SearchBar } from './Components/SearchBar/SearchBar';
 import { EmptyCourseList } from '../EmptyCourseList/EmptyCourseList';
 import { CourseData } from 'helpers/Types';
 import Button from 'common/Button/Button';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from 'helpers/hooks';
 import { getCourses, getAuthors } from 'store/selectors';
 import './Courses.css';
 
 export const Courses = () => {
-  const courseList = useSelector(getCourses);
-  const authorList = useSelector(getAuthors);
+  const courseList = useAppSelector(getCourses);
+  const authorList = useAppSelector(getAuthors);
 
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+
   const handleSearch = (term: string) => {
     const lowercaseSearchTerm = term.toLowerCase();
     setSearchTerm(lowercaseSearchTerm);
@@ -27,13 +27,11 @@ export const Courses = () => {
         <div className='courses-wrapper'>
           <div className='search-bar-btn'>
             <SearchBar onSearch={handleSearch} />
-            {token && (
-              <Button
-                label='ADD NEW COURSE'
-                size='large'
-                onClick={() => navigate('/courses/add')}
-              />
-            )}
+            <Button
+              label='ADD NEW COURSE'
+              size='large'
+              onClick={() => navigate('/courses/add')}
+            />
           </div>
           <div className='courses-list-wrapper'>
             {courseList

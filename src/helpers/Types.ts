@@ -32,15 +32,6 @@ export type ErrorsParam = {
   password: string;
 };
 
-export interface FormData {
-  id: string;
-  title: string;
-  description: string;
-  duration: number;
-  creationDate: string;
-  authors: string[];
-}
-
 export interface SearchBarProps {
   onSearch: (term: string) => void;
 }

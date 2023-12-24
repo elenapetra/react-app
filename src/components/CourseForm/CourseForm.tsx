@@ -1,26 +1,29 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from 'helpers/hooks';
 import Button from 'common/Button/Button';
 import { AuthorItem } from './components/AuthorItem/AuthorItem';
 import { Input } from 'common/Input/Input';
 import { getCourseDuration } from 'helpers/getCourseDuration';
-import { v4 as uuid } from 'uuid';
-import { AuthorData, FormData } from 'helpers/Types';
-import { saveAuthorAction } from 'store/authors/actions';
-import { saveCourseAction } from 'store/courses/actions';
-import { useSelector } from 'react-redux';
+import { AuthorData, CourseData } from 'helpers/Types';
+import { useAppSelector } from 'helpers/hooks';
 import { getAuthors } from 'store/selectors';
+import { addAuthorThunk } from 'store/authors/thunk';
+import './CourseForm.css';
 
-import './CreateCourse.css';
+export const CourseForm = ({ course, onSubmit }: any) => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const storeAuthors = useAppSelector(getAuthors);
+  const [formData, setFormData] = useState({
+    id: course.id,
+    title: course.title,
+    description: course.description,
+    duration: course.duration,
+    creationDate: course.creationDate,
+  });
 
-export const CreateCourse = () => {
-  const initialValues = { title: '', description: '', duration: 0 };
-  const [formData, setFormData] = useState(initialValues);
-  const [courseAuthors, setCourseAuthors] = useState<
-    { id: string; name: string }[]
-  >([]);
-  const authorList = useSelector(getAuthors);
+  const [courseAuthors, setCourseAuthors] = useState<AuthorData[]>([]);
   const [authorsList, setAuthorsList] = useState<AuthorData[]>([]);
   const [name, setName] = useState('');
   const [errorMessage, setErrorMessage] = useState({
@@ -30,21 +33,26 @@ export const CreateCourse = () => {
   });
   const [authorError, setAuthorError] = useState('');
   const [courseAuthorsError, setCourseAuthorsError] = useState('');
-  const responseFormBody: FormData = {
-    id: '',
-    title: '',
-    description: '',
-    duration: 0,
-    creationDate: '',
-    authors: [],
-  };
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    setAuthorsList(authorList);
-  }, [authorList]);
+    setCourseAuthors((prevState) => {
+      return [
+        ...prevState,
+        ...storeAuthors.filter((author) => course.authors.includes(author.id)),
+      ];
+    });
+    setAuthorsList((prevState) => {
+      const prevStateIds = prevState.map((a) => a.id);
+      return [
+        ...prevState,
+        ...storeAuthors.filter(
+          (author) =>
+            !course.authors.includes(author.id) &&
+            !prevStateIds.includes(author.id)
+        ),
+      ];
+    });
+  }, [storeAuthors]);
 
   const handleInputFields = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -60,17 +68,18 @@ export const CreateCourse = () => {
       !result.duration.length &&
       courseAuthors.length
     ) {
-      responseFormBody.id = uuid();
-      responseFormBody.title = formData.title;
-      responseFormBody.description = formData.description;
-      responseFormBody.duration = formData.duration;
-      responseFormBody.creationDate = new Date().toString();
-      responseFormBody.authors = courseAuthors.map((a) => {
-        return a.id;
-      });
+      const newCourseFormBody: CourseData = {
+        id: formData.id,
+        title: formData.title,
+        description: formData.description,
+        duration: Number(formData.duration),
+        creationDate: formData.creationDate,
+        authors: courseAuthors.map((a) => {
+          return a.id;
+        }),
+      };
 
-      dispatch(saveCourseAction(responseFormBody));
-      navigate('/courses');
+      onSubmit(newCourseFormBody);
     }
     if (courseAuthors.length === 0) {
       setCourseAuthorsError('Please add at least an author.');
@@ -80,16 +89,15 @@ export const CreateCourse = () => {
   const addToList = (e: any) => {
     e.preventDefault();
     if (name.length >= 2) {
-      const doesNameExist = authorList.some(
+      const doesNameExist = storeAuthors.some(
         (author: AuthorData) => author.name === name
       );
       if (doesNameExist) {
         setAuthorError('Author with this name already exists!');
       } else {
         setAuthorError('');
-        const newAuthor = { name, id: uuid() };
-        dispatch(saveAuthorAction(newAuthor));
-        setAuthorsList([...authorsList, newAuthor]);
+        const newAuthor = { name, id: '' };
+        dispatch(addAuthorThunk(newAuthor));
         setName('');
       }
     } else {
@@ -98,19 +106,19 @@ export const CreateCourse = () => {
   };
 
   const handleAddButton = (author: { id: string; name: string }) => {
-    const newAuthorsList = authorsList.filter((item: any) => {
-      return item.id !== author.id;
-    });
-    setAuthorsList(newAuthorsList);
+    setAuthorsList((prevState) =>
+      prevState.filter((item: AuthorData) => item.id !== author.id)
+    );
     setCourseAuthors([...courseAuthors, author]);
   };
 
-  const handleDeleteButton = (author: { id: string; name: string }) => {
-    const newCourseList = courseAuthors.filter((item) => {
-      return item.id !== author.id;
-    });
-    setAuthorsList([...authorsList, author]);
-    setCourseAuthors(newCourseList);
+  const handleDeleteButton = (author: AuthorData) => {
+    setCourseAuthors((prevState) =>
+      prevState.filter((item) => {
+        return item.id !== author.id;
+      })
+    );
+    setAuthorsList((prevState) => [...prevState, author]);
   };
 
   const validation = (formData: {
@@ -241,7 +249,7 @@ export const CreateCourse = () => {
             <div className='authors-list'>
               <h3>Authors List</h3>
               <div className='author-item'>
-                {authorsList.map((author: any) => (
+                {authorsList.map((author: AuthorData) => (
                   <AuthorItem
                     key={author.id}
                     authorName={author.name}

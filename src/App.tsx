@@ -4,10 +4,11 @@ import { Header } from './components/Header/Header';
 import { CourseInfo } from 'components/CourseInfo/CourseInfo';
 import { Registration } from 'components/Registration/Registration';
 import { Login } from 'components/Login/Login';
-import { CreateCourse } from 'components/CreateCourse/CreateCourse';
 import { useFetchAppData } from 'helpers/fetchData';
-
 import './App.css';
+import { PrivateRoute } from 'components/PrivateRoute/PrivateRoute';
+import { CourseUpdate } from 'components/CourseForm/CourseUpdate';
+import { CourseAdd } from 'components/CourseForm/CourseAdd';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -27,7 +28,15 @@ function App() {
                 token ? <Navigate to='/courses' /> : <Navigate to='/login' />
               }
             />
-            <Route path='/courses/add' element={<CreateCourse />} />
+            <Route
+              path='courses/add'
+              element={<PrivateRoute element={<CourseAdd />} />}
+            />
+            <Route
+              path='/courses/update/:courseId'
+              element={<PrivateRoute element={<CourseUpdate />} />}
+            />
+
             <Route path='/registration' element={<Registration />} />
             <Route path='/login' element={<Login />} />
             <Route path='/courses' element={<Courses />} />

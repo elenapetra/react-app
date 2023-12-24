@@ -9,5 +9,4 @@ const rootReducer = combineReducers({
   authors: authorsReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

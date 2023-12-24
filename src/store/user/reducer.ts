@@ -5,11 +5,13 @@ export const userInitialState: UserType = {
   name: '',
   email: '',
   token: '',
+  role: '',
 };
 export const usersReducer = (state = userInitialState, action: UsersAction) => {
   switch (action.type) {
     case UsersActionTypes.STORE_USER:
       return {
+        ...state,
         isAuth: action.payload.isAuth,
         name: action.payload.name,
         email: action.payload.email,
@@ -18,6 +20,11 @@ export const usersReducer = (state = userInitialState, action: UsersAction) => {
     case UsersActionTypes.REMOVE_USER:
       return {
         ...userInitialState,
+      };
+    case UsersActionTypes.GET_USER:
+      return {
+        ...state,
+        ...action.payload,
       };
     default:
       return state;
