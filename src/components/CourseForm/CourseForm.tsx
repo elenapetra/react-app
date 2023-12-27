@@ -36,9 +36,14 @@ export const CourseForm = ({ course, onSubmit }: any) => {
 
   useEffect(() => {
     setCourseAuthors((prevState) => {
+      const prevStateIds = prevState.map((a) => a.id);
       return [
         ...prevState,
-        ...storeAuthors.filter((author) => course.authors.includes(author.id)),
+        ...storeAuthors.filter(
+          (author) =>
+            course.authors.includes(author.id) &&
+            !prevStateIds.includes(author.id)
+        ),
       ];
     });
     setAuthorsList((prevState) => {

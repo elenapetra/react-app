@@ -10,6 +10,7 @@ import './CourseCard.css';
 import { useAppDispatch, useAppSelector } from 'helpers/hooks';
 import { deleteCourseThunk } from 'store/courses/thunk';
 import { getUserRole } from 'store/selectors';
+import { formatCreationDate } from 'helpers/formatCreationDate';
 
 export const CourseCard = ({ course, authors }: ICourseCard) => {
   const navigate = useNavigate();
@@ -47,7 +48,7 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
             <span> Duration:</span> {getCourseDuration(course.duration)}
           </div>
           <div className='course-card-row'>
-            <span>Created:</span> {course.creationDate}
+            <span>Created:</span> {formatCreationDate(course.creationDate)}
           </div>
         </div>
         <div className='right-buttons'>

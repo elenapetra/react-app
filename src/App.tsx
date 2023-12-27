@@ -36,7 +36,6 @@ function App() {
               path='/courses/update/:courseId'
               element={<PrivateRoute element={<CourseUpdate />} />}
             />
-
             <Route path='/registration' element={<Registration />} />
             <Route path='/login' element={<Login />} />
             <Route path='/courses' element={<Courses />} />

@@ -4,6 +4,7 @@ import { getCourseDuration } from 'helpers/getCourseDuration';
 import { getCourses, getAuthors } from 'store/selectors';
 import { useAppSelector } from 'helpers/hooks';
 import { CourseData, AuthorData } from 'helpers/Types';
+import { formatCreationDate } from 'helpers/formatCreationDate';
 import './CourseInfo.css';
 
 export const CourseInfo = () => {
@@ -41,7 +42,7 @@ export const CourseInfo = () => {
           </div>
           <div className='info-row'>
             <span className='title-row'> Created: </span>
-            {course.creationDate}
+            {formatCreationDate(course.creationDate)}
           </div>
           <div className='info-row'>
             <span className='title-row'>Authors: </span>
