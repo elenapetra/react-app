@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import Button from 'common/Button/Button';
 import { Input } from 'common/Input/Input';
 import { ErrorsParam } from 'helpers/Types';
 import { storeUserAction } from 'store/user/actions';
 import './Login.css';
+import { fetchCurrentUserThunk } from 'store/user/thunk';
+import { useAppDispatch } from 'helpers/hooks';
 
 export const Login = () => {
   const initialValues = { email: '', password: '', name: '' };
   const [user, setUser] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({ email: '', password: '' });
   const [loginError, setLoginError] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   async function login() {
@@ -33,7 +34,6 @@ export const Login = () => {
       }
       const content = await res.json();
       localStorage.setItem('token', content.result);
-
       dispatch(
         storeUserAction({
           isAuth: true,
@@ -42,8 +42,6 @@ export const Login = () => {
           token: content.result,
         })
       );
-
-      navigate('/courses');
     } catch (error: any) {
       setLoginError(error.message);
       if (error.message === 'Failed to fetch') {
@@ -53,8 +51,18 @@ export const Login = () => {
       } else {
         setLoginError(error.message);
       }
+      return false;
     }
+    return true;
   }
+
+  const onLogin = async () => {
+    const isLoggedIn = await login();
+    if (isLoggedIn) {
+      dispatch(fetchCurrentUserThunk());
+      navigate('/courses');
+    }
+  };
 
   const handleInput = (e: any) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -109,7 +117,7 @@ export const Login = () => {
           )}
         </div>
         <div className='login-row'>
-          <Button label='LOGIN' onClick={login} size='extra-large' />
+          <Button label='LOGIN' onClick={onLogin} size='extra-large' />
           {/* {!formErrors && <p className='login-error'>{loginError}</p>} */}
           {Object.keys(formErrors).length === 0 && (
             <p className='login-error'>{loginError}</p>

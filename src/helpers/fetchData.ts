@@ -1,25 +1,22 @@
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from './hooks';
 import { useEffect } from 'react';
-import { fetchCourses, fetchAuthors } from 'services';
-import { storeAuthorAction } from 'store/authors/actions';
-import { storeCourseAction } from 'store/courses/actions';
+import { fetchAuthorsThunk } from 'store/authors/thunk';
+import { fetchCoursesThunk } from 'store/courses/thunk';
 
 export const useFetchAppData = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const authorsResponse = await fetchAuthors();
-        dispatch(storeAuthorAction(authorsResponse.result));
+        dispatch(fetchCoursesThunk());
       } catch (error) {
-        console.error('Error fetching and saving authors:', error);
+        console.error('Error fetching and saving courses:', error);
       }
 
       try {
-        const coursesResponse = await fetchCourses();
-        dispatch(storeCourseAction(coursesResponse.result));
+        dispatch(fetchAuthorsThunk());
       } catch (error) {
-        console.error('Error fetching and saving courses:', error);
+        console.error('Error fetching and saving authors:', error);
       }
     };
     fetchData();

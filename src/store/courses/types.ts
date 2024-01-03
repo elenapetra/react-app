@@ -8,12 +8,16 @@ export type CourseType = {
 };
 
 export const enum CoursesActionTypes {
-  SAVE_COURSE = 'SAVE_COURSE',
+  ADD_COURSE = 'ADD_COURSE',
   STORE_COURSES = 'STORE_COURSES',
   DELETE_COURSE = 'DELETE_COURSE',
   UPDATE_COURSE = 'UPDATE_COURSE',
 }
 
+export type AddCourseAction = {
+  type: CoursesActionTypes.ADD_COURSE;
+  payload: CourseType;
+};
 export type StoreCourseAction = {
   type: CoursesActionTypes.STORE_COURSES;
   payload: CourseType[];
@@ -22,20 +26,14 @@ export type DeleteCourseAction = {
   type: CoursesActionTypes.DELETE_COURSE;
   payload: string;
 };
-export type SaveCourseAction = {
-  type: CoursesActionTypes.SAVE_COURSE;
-  payload: CourseType;
-};
+
 export type UpdateCourseAction = {
   type: CoursesActionTypes.UPDATE_COURSE;
-  payload: {
-    courseId: string;
-    updatedCourse: CourseType;
-  };
+  payload: CourseType;
 };
 
-interface SaveCourse {
-  type: CoursesActionTypes.SAVE_COURSE;
+interface AddCourse {
+  type: CoursesActionTypes.ADD_COURSE;
   payload: CourseType;
 }
 
@@ -51,14 +49,11 @@ interface DeleteCourse {
 
 interface UpdateCourse {
   type: CoursesActionTypes.UPDATE_COURSE;
-  payload: {
-    courseId: string;
-    updatedCourse: CourseType;
-  };
+  payload: CourseType;
 }
 
 export type CoursesAction =
-  | SaveCourse
+  | AddCourse
   | StoreCourses
   | DeleteCourse
   | UpdateCourse;

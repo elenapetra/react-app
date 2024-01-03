@@ -1,26 +1,32 @@
 import { useNavigate } from 'react-router-dom';
 import { getCourseDuration } from '../../../../helpers/getCourseDuration';
 import Button from 'common/Button/Button';
-import { formatCreationDate } from '../../../../helpers/formatCreationDate';
 import { ICourseCard, AuthorData } from 'helpers/Types';
 import {
   DeleteOutlined as DeleteOutlinedIcon,
   CreateOutlined as CreateOutlinedIcon,
 } from '@mui/icons-material';
 import './CourseCard.css';
-import { useDispatch } from 'react-redux';
-import { deleteCourseAction } from 'store/courses/actions';
+import { useAppDispatch, useAppSelector } from 'helpers/hooks';
+import { deleteCourseThunk } from 'store/courses/thunk';
+import { getUserRole } from 'store/selectors';
+import { formatCreationDate } from 'helpers/formatCreationDate';
+import { Link } from 'react-router-dom';
 
 export const CourseCard = ({ course, authors }: ICourseCard) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const userRole = useAppSelector(getUserRole);
   const courseAuthors = authors.filter((a) => course.authors.includes(a.id));
-
   const onCourseClick = (courseId: String) => {
     navigate(`/courses/${courseId}`);
   };
-  const dispatch = useDispatch();
+
   const handleDeleteClick = () => {
-    dispatch(deleteCourseAction(course.id));
+    dispatch(deleteCourseThunk(course.id));
+  };
+  const handleEditClick = () => {
+    navigate(`/courses/update/${course.id}`);
   };
 
   return (
@@ -53,18 +59,24 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
             size='medium'
             className='show-course-button'
           />
-          <Button
-            onClick={handleDeleteClick}
-            size='custom-btn'
-            label={<DeleteOutlinedIcon className='trash-icon' />}
-            className='trash-btn'
-          />
-          <Button
-            onClick={() => console.log('edit')}
-            size='custom-btn'
-            label={<CreateOutlinedIcon className='edit-icon' />}
-            className='edit-btn'
-          />
+          {userRole === 'admin' && (
+            <>
+              <Button
+                onClick={handleDeleteClick}
+                size='custom-btn'
+                label={<DeleteOutlinedIcon className='trash-icon' />}
+                className='trash-btn'
+              />
+              <Button
+                onClick={handleEditClick}
+                size='custom-btn'
+                label={<CreateOutlinedIcon className='edit-icon' />}
+                className='edit-btn'
+                component={Link}
+                to={`/courses/update/${course.id}`}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import React from 'react';
 import './Button.css';
+import { Link, LinkProps, To } from 'react-router-dom';
 
 type ButtonProps = {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: any;
   size:
     | 'very-small'
     | 'small'
@@ -15,9 +16,19 @@ type ButtonProps = {
   type?: string;
   form?: string;
   className?: string;
+  component?: React.ElementType;
+  to?: any;
 };
 
-const Button = ({ label, onClick, size, form, className }: ButtonProps) => {
+const Button = ({
+  label,
+  onClick,
+  size,
+  form,
+  className,
+  component,
+  to,
+}: ButtonProps) => {
   const getSizeStyles = (width: string) => {
     switch (width) {
       case 'very-small':
@@ -41,7 +52,18 @@ const Button = ({ label, onClick, size, form, className }: ButtonProps) => {
   const buttonStyles = {
     width: getSizeStyles(size),
   };
-
+  if (component) {
+    return (
+      <Link
+        to={to}
+        style={buttonStyles}
+        className={className}
+        onClick={onClick}
+      >
+        {label}
+      </Link>
+    );
+  }
   return (
     <button
       style={buttonStyles}
