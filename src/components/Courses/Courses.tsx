@@ -20,10 +20,9 @@ export const Courses = () => {
     const lowercaseSearchTerm = term.toLowerCase();
     setSearchTerm(lowercaseSearchTerm);
   };
-
   return (
     <div className='courses-component-wrapper'>
-      {courseList.length ? (
+      {courseList && courseList.length ? (
         <div className='courses-wrapper'>
           <div className='search-bar-btn'>
             <SearchBar onSearch={handleSearch} />
