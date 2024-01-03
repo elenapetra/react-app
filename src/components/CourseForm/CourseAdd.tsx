@@ -22,5 +22,11 @@ export const CourseAdd = () => {
     navigate('/courses');
   };
 
-  return <CourseForm course={course} onSubmit={onSubmit} />;
+  return (
+    <CourseForm
+      course={course}
+      onSubmit={onSubmit}
+      buttonLabel='CREATE COURSE'
+    />
+  );
 };

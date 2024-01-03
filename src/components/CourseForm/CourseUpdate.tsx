@@ -21,5 +21,11 @@ export const CourseUpdate = () => {
     navigate('/courses');
   };
 
-  return <CourseForm course={courseBackend} onSubmit={onSubmit} />;
+  return (
+    <CourseForm
+      course={courseBackend}
+      onSubmit={onSubmit}
+      buttonLabel='UPDATE COURSE'
+    />
+  );
 };

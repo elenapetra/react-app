@@ -11,7 +11,7 @@ import { getAuthors } from 'store/selectors';
 import { addAuthorThunk } from 'store/authors/thunk';
 import './CourseForm.css';
 
-export const CourseForm = ({ course, onSubmit }: any) => {
+export const CourseForm = ({ course, onSubmit, buttonLabel }: any) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const storeAuthors = useAppSelector(getAuthors);
@@ -36,24 +36,22 @@ export const CourseForm = ({ course, onSubmit }: any) => {
 
   useEffect(() => {
     setCourseAuthors((prevState) => {
-      const prevStateIds = prevState.map((a) => a.id);
       return [
         ...prevState,
         ...storeAuthors.filter(
           (author) =>
             course.authors.includes(author.id) &&
-            !prevStateIds.includes(author.id)
+            !prevState.some((item) => item.id === author.id)
         ),
       ];
     });
     setAuthorsList((prevState) => {
-      const prevStateIds = prevState.map((a) => a.id);
       return [
         ...prevState,
         ...storeAuthors.filter(
           (author) =>
             !course.authors.includes(author.id) &&
-            !prevStateIds.includes(author.id)
+            !prevState.some((item) => item.id === author.id)
         ),
       ];
     });
@@ -282,7 +280,7 @@ export const CourseForm = ({ course, onSubmit }: any) => {
         />
         <Button
           form='myform'
-          label='CREATE COURSE'
+          label={buttonLabel}
           type='submit'
           className='submit-btn'
           size='large'

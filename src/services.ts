@@ -22,8 +22,8 @@ const fetchCourses = async () => {
     if (!response.ok) {
       throw new Error('Failed to fetch courses');
     }
-    const result = await response.json();
-    return result.result;
+    const { result } = await response.json();
+    return result;
   } catch (error) {
     console.error('Error fetching courses:', error);
     throw error;
@@ -43,8 +43,8 @@ const fetchAuthors = async () => {
     if (!response.ok) {
       throw new Error('Failed to fetch authors');
     }
-    const result = await response.json();
-    return result.result;
+    const { result } = await response.json();
+    return result;
   } catch (error) {
     console.error('Error fetching authors:', error);
     throw error;
@@ -125,8 +125,8 @@ const addCourseRequest = async (newCourseData: CourseType) => {
     if (!response.ok) {
       throw new Error('Failed to add a new course');
     }
-    const result = await response.json();
-    return result.result;
+    const { result } = await response.json();
+    return result;
   } catch (error) {
     console.error('Error fetching courses:', error);
     throw error;
@@ -147,8 +147,8 @@ const addAuthorRequest = async (newAuthor: AuthorType) => {
     if (!response.ok) {
       throw new Error('Failed to add a new author');
     }
-    const result = await response.json();
-    return result.result;
+    const { result } = await response.json();
+    return result;
   } catch (error) {
     console.error('Error fetching author:', error);
     throw error;
@@ -172,8 +172,8 @@ const updateCourseRequest = async (updatedCourse: CourseType) => {
     if (!response.ok) {
       throw new Error('Failed to update the course');
     }
-    const result = await response.json();
-    return result.result;
+    const { result } = await response.json();
+    return result;
   } catch (error) {
     console.error('Error fetching course:', error);
     throw error;

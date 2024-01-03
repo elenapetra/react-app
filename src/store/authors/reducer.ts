@@ -7,7 +7,7 @@ export const authorsReducer = (
 ) => {
   switch (action.type) {
     case AuthorsActionTypes.STORE_AUTHORS:
-      return [...state, ...action.payload];
+      return [...action.payload];
     case AuthorsActionTypes.SAVE_AUTHOR:
       return [...state, action.payload];
     default:

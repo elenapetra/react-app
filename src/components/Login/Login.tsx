@@ -57,8 +57,8 @@ export const Login = () => {
   }
 
   const onLogin = async () => {
-    const isLogged = await login();
-    if (isLogged) {
+    const isLoggedIn = await login();
+    if (isLoggedIn) {
       dispatch(fetchCurrentUserThunk());
       navigate('/courses');
     }

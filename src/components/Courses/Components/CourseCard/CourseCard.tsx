@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from 'helpers/hooks';
 import { deleteCourseThunk } from 'store/courses/thunk';
 import { getUserRole } from 'store/selectors';
 import { formatCreationDate } from 'helpers/formatCreationDate';
+import { Link } from 'react-router-dom';
 
 export const CourseCard = ({ course, authors }: ICourseCard) => {
   const navigate = useNavigate();
@@ -71,6 +72,8 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
                 size='custom-btn'
                 label={<CreateOutlinedIcon className='edit-icon' />}
                 className='edit-btn'
+                component={Link}
+                to={`/courses/update/${course.id}`}
               />
             </>
           )}

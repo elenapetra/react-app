@@ -7,7 +7,7 @@ export const coursesReducer = (
 ) => {
   switch (action.type) {
     case CoursesActionTypes.STORE_COURSES:
-      return [...state, ...action.payload];
+      return [...action.payload];
     case CoursesActionTypes.ADD_COURSE:
       return [...state, action.payload];
     case CoursesActionTypes.DELETE_COURSE:
