@@ -30,7 +30,7 @@ export const CourseCard = ({ course, authors }: ICourseCard) => {
   };
 
   return (
-    <div className='course-card-wrapper'>
+    <div className='course-card-wrapper' data-testid='course-card'>
       <div className='course-card-left-column'>
         <h3 className='course-card-title'>{course.title}</h3>
         <div className='course-card-description'>{course.description}</div>

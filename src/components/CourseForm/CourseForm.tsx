@@ -147,7 +147,7 @@ export const CourseForm = ({ course, onSubmit, buttonLabel }: any) => {
   };
 
   return (
-    <div className='create-course-wrapper'>
+    <div className='create-course-wrapper' data-testid='course-form'>
       <h3 className='create-course-title'>Course Edit/Create Page</h3>
       <div className='form-wrapper'>
         <form onSubmit={handleSubmit} id='myform'>

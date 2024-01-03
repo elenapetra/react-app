@@ -1,5 +1,4 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-
 import Button from 'common/Button/Button';
 import { Logo } from './components/Logo/Logo';
 import { getUserName } from 'store/selectors';
@@ -44,7 +43,6 @@ export const Header = () => {
             </div>
           ) : (
             <div>
-              {' '}
               <Button label='LOGIN' size='small' onClick={handleLogin} />
             </div>
           )}
