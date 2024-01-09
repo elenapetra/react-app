@@ -4,27 +4,16 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { getCourseDuration } from 'helpers/getCourseDuration.ts';
 import { formatCreationDate } from 'helpers/formatCreationDate.ts';
+import * as mockData from 'helpers/mockData.json';
 
+const sampleAuthors = mockData.mockAuthors;
+const sampleCourse = mockData.mockCourses[0];
 const mockStore = configureStore();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: jest.fn(),
 }));
-
-const sampleAuthors = [
-  { id: '1', name: 'Author 1' },
-  { id: '2', name: 'Author 2' },
-];
-
-const sampleCourse = {
-  id: '123',
-  title: 'Sample Course Title',
-  description: 'Sample Course Description',
-  authors: ['1', '2'],
-  duration: 120,
-  creationDate: '25/12/2023',
-};
 
 const renderCourseCard = (initialState = {}) => {
   const store = mockStore({
@@ -73,7 +62,10 @@ describe('CourseCard', () => {
     const expectedAuthorsList = sampleCourse.authors
       .map((authorId) => {
         const author = sampleAuthors.find((a) => a.id === authorId);
-        return author ? author.name : '';
+        if (!author) {
+          throw new Error(`Author not found for ID ${authorId}`);
+        }
+        return author.name;
       })
       .join(', ');
     const authorsListElement = screen.getByText(expectedAuthorsList);

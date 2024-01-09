@@ -1,5 +1,9 @@
 import { coursesReducer, coursesInitialState } from 'store/courses/reducer';
 import { CoursesActionTypes } from 'store/courses/types';
+import * as mockData from 'helpers/mockData.json';
+
+const sampleCoursesArray = mockData.mockCourses;
+const sampleCourse = mockData.mockCourses[0];
 
 describe('Courses Reducer', () => {
   it('should return the initial state', () => {
@@ -8,41 +12,17 @@ describe('Courses Reducer', () => {
   });
 
   it('should handle ADD_COURSE and return new state', () => {
-    const initialCourse = {
-      id: '1',
-      title: 'Initial Course',
-      description: 'description',
-      duration: 30,
-      creationDate: '25/12/2023',
-      authors: ['1', '2'],
-    };
     const newState = coursesReducer(coursesInitialState, {
       type: CoursesActionTypes.ADD_COURSE,
-      payload: initialCourse,
+      payload: sampleCourse,
     });
 
-    expect(newState).toEqual([initialCourse]);
+    expect(newState).toEqual([sampleCourse]);
   });
 
   it('should handle ADD_COURSE and append to existing state', () => {
-    const existingState = [
-      {
-        id: '1',
-        title: 'Course 1',
-        description: 'description',
-        duration: 30,
-        creationDate: '25/12/2023',
-        authors: ['1', '2'],
-      },
-    ];
-    const newCourse = {
-      id: '3',
-      title: 'New Course',
-      description: 'description',
-      duration: 60,
-      creationDate: '26/12/2023',
-      authors: ['3', '4'],
-    };
+    const existingState = sampleCoursesArray;
+    const newCourse = sampleCourse;
     const newState = coursesReducer(existingState, {
       type: CoursesActionTypes.ADD_COURSE,
       payload: newCourse,

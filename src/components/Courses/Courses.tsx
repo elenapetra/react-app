@@ -22,7 +22,7 @@ export const Courses = () => {
   };
   return (
     <div className='courses-component-wrapper'>
-      {courseList && courseList.length ? (
+      {courseList?.length ? (
         <div className='courses-wrapper'>
           <div className='search-bar-btn'>
             <SearchBar onSearch={handleSearch} />

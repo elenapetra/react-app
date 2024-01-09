@@ -4,32 +4,19 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import { MemoryRouter } from 'react-router-dom';
 import { CourseAdd } from 'components/CourseForm/CourseAdd';
+import * as mockData from 'helpers/mockData.json';
 
+const sampleAuthors = mockData.mockAuthors;
+const sampleCourse = mockData.mockCourses;
 const mockStore = configureStore();
-
-const mockAuthors = [
-  { id: '1', name: 'Author 1' },
-  { id: '2', name: 'Author 2' },
-];
-
-const mockCourses = [
-  {
-    id: '123',
-    title: 'Sample Course Title',
-    description: 'Sample Course Description',
-    authors: ['1', '2'],
-    duration: 120,
-    creationDate: '25/12/2023',
-  },
-];
 
 const renderCourses = () => {
   const store = mockStore({
-    courses: mockCourses,
+    courses: sampleCourse,
     user: {
       isAuth: true,
     },
-    authors: mockAuthors,
+    authors: sampleAuthors,
   });
 
   render(
@@ -47,7 +34,7 @@ const renderCourseAdd = (userRole) => {
       isAuth: true,
       role: userRole,
     },
-    authors: mockAuthors,
+    authors: sampleAuthors,
   });
 
   render(
@@ -63,7 +50,7 @@ describe('Courses Component', () => {
   it('Displays the correct number of CourseCard components', () => {
     renderCourses();
     const courseCardElements = screen.getAllByTestId('course-card');
-    expect(courseCardElements.length).toBe(mockCourses.length);
+    expect(courseCardElements.length).toBe(sampleCourse.length);
   });
 
   it('Shows CourseForm after clicking "ADD NEW COURSE" button for admin role', async () => {
